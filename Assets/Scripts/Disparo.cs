@@ -5,23 +5,32 @@ using UnityEngine;
 
 public class Disparo : MonoBehaviour
 {
-    [SerializeField] private Transform ControlDisparo;
-    [SerializeField] private GameObject Bala1;
-    //public GameObject BalaPrefab;
+    public Transform ControlDisparo;
+    public GameObject Bala;
 
+    public float ForceShot = 1500f;
+    public float RateShot = 0.5f;
+
+    private float shotRateTime = 0;
    
     void Update()
     {
         if (Input.GetKey(KeyCode.Space)) 
         {
-            Disparar();
+            if (Time.time > shotRateTime) 
+            {
+                GameObject newBala;
+                newBala = Instantiate(Bala, ControlDisparo.position, ControlDisparo.rotation);
+                newBala.GetComponent<Rigidbody>().AddForce(ControlDisparo.forward * ForceShot);
+                shotRateTime = Time.time + RateShot;
+                Destroy(newBala, 2);
+            }
+            
+            
+            
         
         }    
     }
 
-    private void Disparar() 
-    {
-        GameObject Bala1 = Instantiate(Bala1, ControlDisparo.position, ControlDisparo.rotation);
-        Bala1.GetComponent<Bala>().SetDirection();
-    }
+    
 }
